@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Index Routes
 
 When we visit `/` in this app it's just our navigation and a blank page.
@@ -85,3 +86,6 @@ an index route if a route's path matches exactly.
 ---
 
 [Next: Index Links](../09-index-links/)
+=======
+# advnc
+>>>>>>> 303538c1f793236429b29649df3677dc4990e004
