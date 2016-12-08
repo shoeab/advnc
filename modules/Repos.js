@@ -80,7 +80,7 @@ class DivRow extends React.Component {
    render() {
       return (
           <div className="row" >
-            <div className="col-sm-12"><h2> <NavLink to={'/about/'+this.props.data._id}> {this.props.data.title} </NavLink> </h2></div>
+            <div className="col-sm-12"><h2> <NavLink to={'/content/'+this.props.data._id}> {this.props.data.title} </NavLink> </h2></div>
 
           
             <div className="col-sm-12" dangerouslySetInnerHTML={{__html: this.props.data.description}}/>

@@ -5,6 +5,7 @@ import App from './modules/App'
 import About from './modules/About'
 import Repos from './modules/Repos'
 import Repo from './modules/Repo'
+import Content from './modules/Content'
 
 render((
   <Router history={hashHistory}>
@@ -12,7 +13,8 @@ render((
       <Route path="/repos" component={Repos}>
         <Route path="/repos/:userName/:repoName" component={Repo}/>
       </Route>
-      <Route path="/about/:id" component={About}/>
+      <Route path="/about" component={About}/>
+      <Route path="/content/:id" component={Content}/>
     </Route>
   </Router>
 ), document.getElementById('app'))
