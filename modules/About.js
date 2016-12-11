@@ -10,7 +10,8 @@ class About extends React.Component {
             title: null,
             description: null,
             category: null,
-            categories: []
+            categories: [],
+            allCategories:[]
         };
     this.apiUrl = "http://127.0.0.1:3000/api/question-add";
     this.categoryApiUrl = "http://127.0.0.1:3000/api/category";
@@ -24,11 +25,26 @@ class About extends React.Component {
 
   handleSubmit(e) {
         e.preventDefault();
-        
+        /*var categories = []
+        $(".categoryCheckbox").attr("checked", "true").each(function(){
+            categories.push($(this).val());
+        });*/
+        let allCategories = this.state.allCategories;
+        let cat = []
+        var checkedValues = $('input:checkbox.categoryCheckbox:checked').map(function () {
+            let vm = this.value 
+            var result = allCategories.filter(function(a){ 
+              a.id = a._id; 
+              return a._id == vm })[0]
+            /*categories._id === this.value*/
+            console.log(result);
+              cat.push(result);
+            
+        }).get();
 
-        this.state.category = document.querySelector('.categoryCheckbox:checked').value;
-                
-    let categories = this.state.categories;
+        //this.state.category = document.querySelector('.categoryCheckbox:checked').value;
+                //console.log(this.state.categories)
+    /*let categories = this.state.categories;
 
         categories = categories.map((item) => {
             if(item.id === e.target.value){
@@ -36,27 +52,30 @@ class About extends React.Component {
             }
 
             return item;
-        });
-
-        this.setState({
-            categories: categories
-        });
+        });*/
+        this.state.categories = cat;
+        /*this.setState({
+            categories: cat
+        });*/
 
         var formData = this.state;
+        delete formData.allCategories;
+        delete formData.category;
+        //console.log(formData);
+
+      $.post( this.apiUrl, formData)
+        .done(function( data ) {
+          this.set = []
+          console.log( data );
+        })
+        .fail(function() {
+        alert( "error" );
+        })
+        .always(function() {
+        alert( "finished" );
+        });
+
         console.log(formData);
-
-    /*$.post( this.apiUrl, formData)
-      .done(function( data ) {
-        console.log( data );
-      })
-      .fail(function() {
-      alert( "error" );
-      })
-      .always(function() {
-      alert( "finished" );
-      });
-
-        console.log(formData);*/
     }
 
     loadArticle() {
@@ -64,8 +83,8 @@ class About extends React.Component {
 
         $.get(this.categoryApiUrl, (categories) => {
             
-          this.setState({ categories: categories });
-          console.log(this.state.categories);
+          this.setState({ allCategories: categories });
+          
           return categories;   
         });
     }
@@ -78,20 +97,20 @@ class About extends React.Component {
   render() {
     return (
     			
-		            <form onSubmit={ this.handleSubmit.bind(this)} encType='multipart/form-data'>
+		            <form onSubmit={ this.handleSubmit.bind(this) } encType='multipart/form-data'>
                   <div className="form-group">
-                    <label for="email">Title:</label>
+                    <label htmlFor="email">Title:</label>
                     <input name="title" label="title" type="text" placeholder="Title" value={this.state.title} onChange={this.handleChange.bind(this)} />
                   </div>
                   
                   <div className="form-group">
-                    <label for="email">Description:</label>
-                    <textarea name="description" label="description" type="text" placeholder="description" value={this.state.description} onChange={this.handleChange.bind(this)}> </textarea>
+                    <label htmlFor="email">Description:</label>
+                    <textarea name="description" label="description" type="text" placeholder="description" defaultValue={this.state.description} onChange={this.handleChange.bind(this)} /> 
                   </div>
 
                   <div className="form-group">
-                    <label for="email">Categories:</label>
-                    {this.state.categories.map((category, i) => <CategoriesCheckbox key = {i} data = {category} />)}
+                    <label htmlFor="email">Categories:</label>
+                    {this.state.allCategories.map((category, i) => <CategoriesCheckbox key = {i} data = {category} />)}
                   </div>
 
                   <div className="form-group">
@@ -112,8 +131,8 @@ class CategoriesCheckbox extends React.Component {
           <div className="row" >
             <div className="col-sm-12"> 
               <input type="checkbox" className="categoryCheckbox" name="category[]" value={this.props.data._id}  /> 
-            {this.props.data.title} 
-          </div>
+              {this.props.data.title} 
+            </div>
           
             <hr/>
           </div>
