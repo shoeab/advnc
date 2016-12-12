@@ -10,6 +10,7 @@ class About extends React.Component {
             title: null,
             description: null,
             category: null,
+            status: null,
             categories: [],
             allCategories:[]
         };
@@ -31,7 +32,7 @@ class About extends React.Component {
         });*/
         let allCategories = this.state.allCategories;
         let cat = []
-        var checkedValues = $('input:checkbox.categoryCheckbox:checked').map(function () {
+        var checkedValues = $('input:checkbox#categoryCheckbox:checked').map(function () {
             let vm = this.value 
             var result = allCategories.filter(function(a){ 
               a.id = a._id; 
@@ -42,17 +43,14 @@ class About extends React.Component {
             
         }).get();
 
-        //this.state.category = document.querySelector('.categoryCheckbox:checked').value;
-                //console.log(this.state.categories)
-    /*let categories = this.state.categories;
+        if (document.getElementById('status').checked) {
+          this.state.status = document.getElementById('status').value;
+        }
+        else
+          this.state.status = "inactive";
 
-        categories = categories.map((item) => {
-            if(item.id === e.target.value){
-                item.associatedWith = !item.associatedWith;
-            }
+        console.log(this.state.status);
 
-            return item;
-        });*/
         this.state.categories = cat;
         /*this.setState({
             categories: cat
@@ -99,13 +97,19 @@ class About extends React.Component {
     			
 		            <form onSubmit={ this.handleSubmit.bind(this) } encType='multipart/form-data'>
                   <div className="form-group">
-                    <label htmlFor="email">Title:</label>
-                    <input name="title" label="title" type="text" placeholder="Title" value={this.state.title} onChange={this.handleChange.bind(this)} />
+                    <label htmlFor="title">Title:</label>
+                    <input name="title" label="title" id="title" type="text" placeholder="Title" value={this.state.title} onChange={this.handleChange.bind(this)} />
                   </div>
                   
                   <div className="form-group">
-                    <label htmlFor="email">Description:</label>
-                    <textarea name="description" label="description" type="text" placeholder="description" defaultValue={this.state.description} onChange={this.handleChange.bind(this)} /> 
+                    <label htmlFor="description">Description:</label>
+                    <textarea name="description" id="description" label="description" type="text" placeholder="description" defaultValue={this.state.description} onChange={this.handleChange.bind(this)} /> 
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="status">Status:</label>
+                    <input name="status" label="status" id="status" type="radio" value="active" onChange={this.handleChange.bind(this)} />Active
+                    <input name="status" label="status" id="status" type="radio" value="inactive" onChange={this.handleChange.bind(this)} />Inactive
                   </div>
 
                   <div className="form-group">
@@ -129,8 +133,8 @@ class CategoriesCheckbox extends React.Component {
    render() {
       return (
           <div className="row" >
-            <div className="col-sm-12"> 
-              <input type="checkbox" className="categoryCheckbox" name="category[]" value={this.props.data._id}  /> 
+            <div className="col-sm-2"> 
+              <input type="checkbox" className="categoryCheckbox" id="categoryCheckbox" name="category[]" value={this.props.data._id}  /> 
               {this.props.data.title} 
             </div>
           
