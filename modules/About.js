@@ -8,14 +8,21 @@ class About extends React.Component {
     this.state = {
             id: null,
             title: null,
+            titleInEnglish: null,
+            summary: null,
             description: null,
             category: null,
             status: null,
+            image: {},
+            tags: [],
+            people:[],
+            businesses:[],
+            locations:[],
             categories: [],
             allCategories:[]
         };
-    this.apiUrl = "http://127.0.0.1:3000/api/question-add";
-    this.categoryApiUrl = "http://127.0.0.1:3000/api/category";
+    this.apiUrl = "http://127.0.0.1:3001/admin/questions";
+    this.categoryApiUrl = "http://127.0.0.1:3001/admin/categories";
   }
 
   handleChange(e) {
@@ -30,13 +37,28 @@ class About extends React.Component {
         $(".categoryCheckbox").attr("checked", "true").each(function(){
             categories.push($(this).val());
         });*/
+        //console.log(this.state.allCategories);
         let allCategories = this.state.allCategories;
-        let cat = []
-        var checkedValues = $('input:checkbox#categoryCheckbox:checked').map(function () {
-            let vm = this.value 
-            var result = allCategories.filter(function(a){ 
-              a.id = a._id; 
-              return a._id == vm })[0]
+        var cat = []
+        /*cat.push ({ 
+                    "id" : "5819ae58feb7191432d4cf52", 
+                    "title" : "উত্তর", 
+                    "titleInEnglish" : "answer", 
+                    "description" : "প্রিয় উত্তর", 
+                    "slug" : "answer", 
+                    "parentId" : null, 
+                    "weight" : 0, 
+                    "status" : "active", 
+                    "isDeleted" : false, 
+                    "deletedAt" : null, 
+                    "oldId" : "answer"
+                  });*/
+        var checkedValues = $('input:checkbox.categoryCheckbox:checked').map(function () {
+            let vm = this.value
+            console.log(vm);
+            var result = allCategories.filter(function(cat){ 
+              // a.id = a._id; 
+              return cat.id == vm })[0]
             /*categories._id === this.value*/
             console.log(result);
               cat.push(result);
@@ -49,17 +71,22 @@ class About extends React.Component {
         else
           this.state.status = "inactive";
 
-        console.log(this.state.status);
+        console.log(cat);
 
         this.state.categories = cat;
         /*this.setState({
             categories: cat
         });*/
+        console.log(JSON.stringify(cat));
+
+        this.state.slug = this.convertToSlug(this.state.title);
+        this.state.titleInEnglish = this.state.title;
+        this.state.summary = this.state.description;
 
         var formData = this.state;
         delete formData.allCategories;
         delete formData.category;
-        //console.log(formData);
+        console.log(formData);
 
       $.post( this.apiUrl, formData)
         .done(function( data ) {
@@ -92,6 +119,15 @@ class About extends React.Component {
                
     }
 
+    convertToSlug(Text)
+    {
+      return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g,'')
+        .replace(/ +/g,'-')
+        ;
+    }
+
   render() {
     return (
     			
@@ -107,15 +143,24 @@ class About extends React.Component {
                   </div>
 
                   <div className="form-group">
+                    <label htmlFor="summary">Summary:</label>
+                    <textarea name="summary" id="summary" label="summary" type="text" placeholder="summary" defaultValue={this.state.summary} onChange={this.handleChange.bind(this)} /> 
+                  </div>
+
+                  <div className="form-group">
                     <label htmlFor="status">Status:</label>
                     <input name="status" label="status" id="status" type="radio" value="active" onChange={this.handleChange.bind(this)} />Active
                     <input name="status" label="status" id="status" type="radio" value="inactive" onChange={this.handleChange.bind(this)} />Inactive
                   </div>
 
                   <div className="form-group">
+
                     <label htmlFor="email">Categories:</label>
-                    {this.state.allCategories.map((category, i) => <CategoriesCheckbox key = {i} data = {category} />)}
-                  </div>
+                    <div className="row" >
+                      {this.state.allCategories.map((category, i) => <CategoriesCheckbox key = {i} data = {category} />)}
+                    </div>
+                  <hr/>
+                </div>
 
                   <div className="form-group">
                     <button type="submit" className="btn btn-primary" value="Save" >Save </button>
@@ -132,14 +177,12 @@ class About extends React.Component {
 class CategoriesCheckbox extends React.Component {
    render() {
       return (
-          <div className="row" >
-            <div className="col-sm-2"> 
-              <input type="checkbox" className="categoryCheckbox" id="categoryCheckbox" name="category[]" value={this.props.data._id}  /> 
-              {this.props.data.title} 
+          
+            <div className="col-sm-2" id={this.props.data.id}> 
+              <input type="checkbox" className="categoryCheckbox" id={this.props.data.title} name="category[]" value={this.props.data.id}  /> 
+               <label htmlFor={this.props.data.title}>{this.props.data.title}</label>
             </div>
           
-            <hr/>
-          </div>
          
       );
    }

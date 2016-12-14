@@ -8,16 +8,18 @@ class Repos extends React.Component {
     this.state = {
             title: null,
             description: null,
-            articles: []
+            articles: [],
+            limit: 10,
+            skip: 478
         };
 
-    this.apiUrl = 'http://127.0.0.1:3000/api/questions/10/0';
+    this.baseApiUrl = 'http://127.0.0.1:3001/admin/questions';
   }
 
   loadArticle() {
-    
+        
 
-        $.get(this.apiUrl, (articles) => {
+        $.get(this.baseApiUrl+"?filter[limit]="+this.state.limit+"&filter[skip]="+this.state.skip+"", (articles) => {
             
             this.setState({ articles: articles });
             console.log(this.state.articles);
@@ -62,6 +64,8 @@ class Repos extends React.Component {
         console.log(formData);
     }
 
+
+
   render() {
     return (
             
@@ -80,7 +84,7 @@ class DivRow extends React.Component {
    render() {
       return (
           <div className="row" >
-            <div className="col-sm-12"><h2> <NavLink to={'/content/'+this.props.data._id}> {this.props.data.title} </NavLink> </h2></div>
+            <div className="col-sm-12"><h2> <NavLink to={'/content/'+this.props.data.id}> {this.props.data.title} </NavLink> </h2></div>
 
           
             <div className="col-sm-12" dangerouslySetInnerHTML={{__html: this.props.data.description}}/>

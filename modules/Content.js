@@ -9,7 +9,7 @@ class Content extends React.Component {
             title: null,
             description: null
         };
-    this.apiUrl = 'http://127.0.0.1:3000/api/question/'+this.state.id;
+    this.apiUrl = 'http://127.0.0.1:3001/admin/questions/'+this.state.id;
   }
 
   loadArticle() {
@@ -17,7 +17,7 @@ class Content extends React.Component {
         $.get(this.apiUrl, (article) => {
             
             this.setState({ title: article.title, description: article.description });
-            console.log(this.state.article);
+            console.log(article);
             
         });
     }
