@@ -6,7 +6,6 @@ class About extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-            id: null,
             title: null,
             titleInEnglish: null,
             summary: null,
@@ -77,7 +76,7 @@ class About extends React.Component {
         /*this.setState({
             categories: cat
         });*/
-        console.log(JSON.stringify(cat));
+        //console.log(JSON.stringify(cat));
 
         this.state.slug = this.convertToSlug(this.state.title);
         this.state.titleInEnglish = this.state.title;
@@ -87,17 +86,19 @@ class About extends React.Component {
         delete formData.allCategories;
         delete formData.category;
         console.log(formData);
-
-      $.post( this.apiUrl, formData)
-        .done(function( data ) {
-          this.set = []
-          console.log( data );
+   
+      $.post( "http://127.0.0.1:3001/admin/questions", formData)
+        .done(function( data, error ) {
+          this.state = []
+          console.log( error.responseText );
         })
-        .fail(function() {
-        alert( "error" );
+        .fail(function(error) {
+          console.log( error.responseJSON.error.message );
+          document.getElementById("msg").innerHTML = error.responseJSON.error.message;
+          alert( "error" );
         })
         .always(function() {
-        alert( "finished" );
+          alert( "finished" );
         });
 
         console.log(formData);
@@ -130,7 +131,7 @@ class About extends React.Component {
 
   render() {
     return (
-    			
+              <div>    			   
 		            <form onSubmit={ this.handleSubmit.bind(this) } encType='multipart/form-data'>
                   <div className="form-group">
                     <label htmlFor="title">Title:</label>
@@ -167,6 +168,8 @@ class About extends React.Component {
                   </div>
 
                 </form>
+                <span id="msg"></span>
+              </div>
 		            
     		)
 

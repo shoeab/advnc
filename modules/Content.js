@@ -7,7 +7,8 @@ class Content extends React.Component {
     this.state = {
             id: this.props.params.id,
             title: null,
-            description: null
+            description: null,
+            categories:[]
         };
     this.apiUrl = 'http://127.0.0.1:3001/admin/questions/'+this.state.id;
   }
@@ -16,8 +17,9 @@ class Content extends React.Component {
     
         $.get(this.apiUrl, (article) => {
             
-            this.setState({ title: article.title, description: article.description });
+            this.setState({ title: article.title, description: article.description, categories: article.categories });
             console.log(article);
+
             
         });
     }
@@ -34,13 +36,30 @@ class Content extends React.Component {
 
 		          
 		            <div className="col-sm-12" dangerouslySetInnerHTML={{__html: this.state.description}}/>
-		          
-		            <hr/>
+                <br/>
+                <div className="col-sm-12"> বিভাগ: </div>
+		            <div className="col-sm-12" >
+                    {this.state.categories.map((category, i) => <CategoriesList key = {i} data = {category} />)}
+                </div>
+		            
 		        </div>
     		)
 
 
   }
+}
+
+class CategoriesList extends React.Component {
+   render() {
+      return (
+          
+            <div className="col-sm-1"> 
+              {this.props.data.title},
+            </div>
+          
+         
+      );
+   }
 }
 
 

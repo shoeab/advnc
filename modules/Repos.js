@@ -10,7 +10,7 @@ class Repos extends React.Component {
             description: null,
             articles: [],
             limit: 10,
-            skip: 478
+            skip: 0
         };
 
     this.baseApiUrl = 'http://127.0.0.1:3001/admin/questions';
