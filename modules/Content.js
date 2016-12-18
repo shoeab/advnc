@@ -37,9 +37,12 @@ class Content extends React.Component {
 		          
 		            <div className="col-sm-12" dangerouslySetInnerHTML={{__html: this.state.description}}/>
                 <br/>
-                <div className="col-sm-12"> বিভাগ: </div>
+                
 		            <div className="col-sm-12" >
-                    {this.state.categories.map((category, i) => <CategoriesList key = {i} data = {category} />)}
+                  <div className="col-sm-1"> বিভাগ: </div>
+                    <div className="col-sm-11">
+                      {this.state.categories.map((category, i) => <CategoriesList key = {i} data = {category} />)}
+                    </div>
                 </div>
 		            
 		        </div>
@@ -53,9 +56,9 @@ class CategoriesList extends React.Component {
    render() {
       return (
           
-            <div className="col-sm-1"> 
+            <span> 
               {this.props.data.title},
-            </div>
+            </span>
           
          
       );
